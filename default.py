@@ -27,9 +27,8 @@ def log(txt):
 def build_url(query):
   return base_url + '?' + urllib.urlencode(query)
 
-
 def getHTML(uri, mobile=False):
-  if (mobile == True):
+  if mobile == True:
     url = sesame_m_base_url + '/' + uri
   else:
     url = sesame_base_url + '/' + uri
