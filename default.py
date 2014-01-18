@@ -14,6 +14,8 @@ sesame_base_domain = 'sesamestreet.org'
 sesame_base_url = 'http://www.' + sesame_base_domain
 sesame_m_base_url = 'http://m.' + sesame_base_domain
 
+videoNum = 25
+
 xbmcplugin.setContent(addon_handle, 'movies')
 
 def log(txt):
@@ -25,21 +27,24 @@ def log(txt):
 def build_url(query):
   return base_url + '?' + urllib.urlencode(query)
 
-page = args.get('page', None)
-if (page):
-  page = page[0]
 
-if page == 'topics':
-  pass
+def getHTML(uri, mobile=False):
+  if (mobile == True):
+    url = sesame_m_base_url + '/' + uri
+  else:
+    url = sesame_base_url + '/' + uri
+  
+  html = urllib.urlopen(url)
+  return html.read()
 
-elif page == 'recent':
+def fetch_vids(filter={}, reset=True):
   post_data = {
     'serviceClassName': 'org.sesameworkshop.service.UmpServiceUtil',
     'serviceMethodName': 'getMediaItems',
     'serviceParameters': ["criteria","capabilities","resultsBiasingPolicy","context"],
     'criteria': {
-      "qty":25,
-      "reset": True,
+      "qty": videoNum,
+      "reset": reset,
       "type": "video"
     },
     'capabilities': {},
@@ -48,9 +53,19 @@ elif page == 'recent':
   }
   headers = {'Content-Type': 'application/x-www-form-urlencoded'}
   req = urllib2.Request(sesame_base_url + '/c/portal/json_service', urllib.urlencode(post_data), headers)
-  videos_data = json.load(urllib2.urlopen(req))
-  
-  for video in videos_data['content']:
+  data = json.load(urllib2.urlopen(req))
+  return data['content']
+
+page = args.get('page', None)
+if (page):
+  page = page[0]
+
+if page == 'topics':
+  pass
+
+elif page == 'recent':
+  videos = fetch_vids()
+  for video in videos:
     if len(video['source']) == 0:
       pass
     
@@ -78,9 +93,8 @@ elif page == 'recent':
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
 elif page == 'muppets':
-  html = urllib.urlopen(sesame_m_base_url + '/muppets')
-  result = html.read()
-  lis = bsoup(result).find('ul', {'id':'muppet-slideshow'}).findAll('li', {'class':'section'})
+  html = getHTML('muppets', True)
+  lis = bsoup(html).find('ul', {'id':'muppet-slideshow'}).findAll('li', {'class':'section'})
   
   for item in lis:
     log(item.a.img['src'])
