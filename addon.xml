@@ -5,6 +5,7 @@
     <import addon="xbmc.addon" version="12.0.0" />
     <import addon="script.module.simplejson" version="2.0.10" />
     <import addon="script.module.parsedom" version="2.5.1" />
+    <import addon="script.module.beautifulsoup" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
