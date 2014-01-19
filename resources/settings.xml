@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="General">
+    <setting id="general videonum" type="labelenum" label="Number of video per page" values="10|25|50" default="25" />
+  </category>
+  <category label="Filters">
+    <setting id="filter agegroup" type="enum" label="By age group" values="All Ages|Age 2 and Under|Age 3|Age 4|Age 5+" />
+  </category>
+</settings>
