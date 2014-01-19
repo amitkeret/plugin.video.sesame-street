@@ -76,7 +76,7 @@ if page == 'topics':
     if item['value'] == '':
       continue
     li = xbmcgui.ListItem(item.string, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','topic':item['value']}), listitem=li, isFolder=True)
+    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','topic':int(item['value'])}), listitem=li, isFolder=True)
     
 elif page == 'recent':
   videos = fetch_vids()
