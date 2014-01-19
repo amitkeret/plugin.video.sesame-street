@@ -2,7 +2,7 @@ import urllib, urllib2
 import json
 import xbmc, xbmcgui, xbmcplugin
 
-import resources.lib.common as common
+from resources.lib import common
 
 def log(txt):
   if isinstance (txt, str):

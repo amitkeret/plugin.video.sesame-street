@@ -6,9 +6,7 @@ import xbmcplugin
 
 from BeautifulSoup import BeautifulSoup as bsoup
 
-import resources.lib.common as common
-import resources.lib.settings as settings
-import resources.lib.utils as utils
+from resources.lib import common, settings, utils
 
 xbmcplugin.setContent(common.addon_handle, 'movies')
 
