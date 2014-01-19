@@ -1,3 +1,6 @@
+v 0.2.2:
+- performance: setting to fetch muppet pictures
+
 v 0.2.1:
 - improved beautiful soup tag matching for muppets
 - fetch JSON-formatted muppet names from JS file

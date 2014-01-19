@@ -81,32 +81,29 @@ elif page == 'recent':
   list_vids(videos)
 
 elif page == 'muppets':
-  # get names and pictures
-  html = utils.getHTML('muppets', True)
-  lis = bsoup(html).find('ul', {'id':'muppet-slideshow'}).findAll('li', {'class':re.compile("section")})
   # get JSON-formatted names
   html = utils.getHTML('ump-portlet/js/sw/sw.ump.js')
   match = re.findall("muppets\s+:\s+\[([\s\"a-zA-Z\|\,]+)\]", html)
   match = re.findall("\"([a-zA-Z\s\|]+)\"", match[0])
-  json_names = []
+  muppets = {}
   for matchi in match:
-    json_names.append(matchi.split('|')[1])
+    muppets.update({matchi.split('|')[0]: {'json-name': matchi.split('|')[1]}})
   
-  for item in lis:
-    m_name = item.a['href'][item.a['href'].index('/muppets/') + len('/muppets/'):]
-    m_name_pretty = ' '.join(m_name.split('-')).title()
-    # search for the JSON-name match
-    for json_name in json_names:
-      if re.search(json_name, m_name_pretty) != None:
-        json_url = json_name
-        break
-    if json_url == None:
-      continue
-    
-    li = xbmcgui.ListItem(m_name_pretty)
-    li.setIconImage(item.a.img['src'])
-    li.setThumbnailImage(item.a.img['src'])
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','muppet':json_url}), listitem=li, isFolder=True)
+  # get pretty names and pictures
+  if settings.generalMuppetPictures == 'true':
+    html = utils.getHTML('muppets', True)
+    lis = bsoup(html).find('ul', {'id':'muppet-slideshow'}).findAll('li', {'class':re.compile("section")})
+    for item in lis:
+      m_name = item.a['href'][item.a['href'].index('/muppets/') + len('/muppets/'):]
+      m_name_pretty = ' '.join(m_name.split('-')).title()
+      for k,muppet in muppets.items():
+        if re.search(muppet['json-name'], m_name_pretty) != None:
+          muppets[k].update({'pretty-name': m_name_pretty, 'image-src': item.a.img['src']})
+          break;
+  
+  for k,muppet in muppets.items():
+    li = xbmcgui.ListItem(muppet.get('pretty-name', muppet['json-name']), iconImage=muppet.get('image-src', ''), thumbnailImage=muppet.get('image-src', ''))
+    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','muppet':muppet['json-name']}), listitem=li, isFolder=True)
     
 elif page == 'list_vids':
 #  utils.log(common.args)
