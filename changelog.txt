@@ -1,3 +1,8 @@
+v 0.2.1:
+- improved beautiful soup tag matching for muppets
+- fetch JSON-formatted muppet names from JS file
+- use python’s dict.get() to check for filters
+
 v 0.2.0:
 - moved multi-used vars/functions/settings to module files: common,utils,settings
 - settings page: video list count, age restriction filter
