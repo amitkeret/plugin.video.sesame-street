@@ -10,7 +10,7 @@ from resources.lib import common, settings, utils
 
 xbmcplugin.setContent(common.addon_handle, 'movies')
 
-def fetch_vids(filters={}, reset=True):
+def fetch_vids(filters={}, reset=False):
   post_data = {
     'serviceClassName': 'org.sesameworkshop.service.UmpServiceUtil',
     'serviceMethodName': 'getMediaItems',
@@ -74,10 +74,10 @@ if page == 'topics':
     if item['value'] == '':
       continue
     li = xbmcgui.ListItem(item.string, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','topic':int(item['value'])}), listitem=li, isFolder=True)
+    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','reset':1,'topic':int(item['value'])}), listitem=li, isFolder=True)
     
 elif page == 'recent':
-  videos = fetch_vids()
+  videos = fetch_vids(reset=True)
   list_vids(videos)
 
 elif page == 'muppets':
@@ -103,7 +103,7 @@ elif page == 'muppets':
   
   for k,muppet in muppets.items():
     li = xbmcgui.ListItem(muppet.get('pretty-name', muppet['json-name']), iconImage=muppet.get('image-src', ''), thumbnailImage=muppet.get('image-src', ''))
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','muppet':muppet['json-name']}), listitem=li, isFolder=True)
+    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','reset':1,'muppet':muppet['json-name']}), listitem=li, isFolder=True)
     
 elif page == 'list_vids':
 #  utils.log(common.args)
@@ -113,7 +113,7 @@ elif page == 'list_vids':
   if common.args.get('topic'):
     filters['topic'] = int(common.args['topic'])
   
-  videos = fetch_vids(filters)
+  videos = fetch_vids(filters, bool(int(common.args.get('reset', 0))))
   if videos==False:
     ok = False
     xbmcgui.Dialog().ok(common.addon_name, 'No videos were found.')
