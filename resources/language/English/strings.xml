@@ -7,8 +7,10 @@
   <!-- settings -->
   <string id="30101">General</string>
   <string id="30102">Filters</string>
+  <string id="30103">File lists</string>
   <string id="30111">Number of videos per page</string>
   <string id="30112">Fetch muppet pictures (slower)</string>
+  <string id="30113">"More videos" button (endless paging)</string>
   <string id="30140">Enable debugging</string>
   <string id="30141">By age group</string>
   <string id="30142">All Ages</string>

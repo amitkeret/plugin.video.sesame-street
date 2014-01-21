@@ -16,7 +16,7 @@ def fetch_vids(filters={}, reset=False):
     'serviceMethodName': 'getMediaItems',
     'serviceParameters': ['criteria','capabilities','resultsBiasingPolicy','context'],
     'criteria': {
-      'qty': settings.generalVideonum,
+      'qty': settings.listsVideonum,
       'reset': reset,
       'type': 'video',
       'filters': filters

@@ -39,6 +39,8 @@ def formatVideoItemBasic(video):
   return li
 
 def moreVideosBtn(args={}):
+  if settings.listsMoreBtn == False:
+    return
   if 'pagenum' in args:
     pagenum = int(args['pagenum']) + 1
   else:

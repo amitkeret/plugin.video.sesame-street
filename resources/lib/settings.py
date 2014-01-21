@@ -1,9 +1,10 @@
 import sys, pickle
 from resources.lib import common
 
-generalVideonum = common.addon.getSetting('general videonum')
 generalMuppetPictures = common.addon.getSetting('general muppetpictures') == 'true'
 generalDebug = common.addon.getSetting('general debug') == 'true'
+listsVideonum = common.addon.getSetting('lists videonum')
+listsMoreBtn = common.addon.getSetting('lists morebtn') == 'true'
 filterAgegroup = common.addon.getSetting('filter agegroup')
 
 # set during runtime, not by the user
