@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.sesame-street" name="SesameStreet.com" version="0.2.3" provider-name="amitkeret">
+<addon id="plugin.video.sesame-street" name="SesameStreet.com" version="0.3.0" provider-name="amitkeret">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="xbmc.addon" version="12.0.0" />
