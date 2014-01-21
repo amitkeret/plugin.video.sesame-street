@@ -118,15 +118,15 @@ elif page == 'list_vids':
   videos = fetch_vids(filters, bool(int(common.args.get('reset', 0))))
   if videos==False:
     ok = False
-    xbmcgui.Dialog().ok(common.addon_name, 'No videos were found.')
+    xbmcgui.Dialog().ok(common.addon_name, common.l(30601))
   else:
     list_vids(videos)
     menu.moreVideosBtn(common.args)
   
 else:
-  menu.addFolderItem('Recent videos', {'page':'recent'})
-  menu.addFolderItem('Muppets', {'page':'muppets'})
-  menu.addFolderItem('Topics', {'page':'topics'})
+  menu.addFolderItem(common.l(30502), {'page':'recent'})
+  menu.addFolderItem(common.l(30503), {'page':'muppets'})
+  menu.addFolderItem(common.l(30504), {'page':'topics'})
 
 
 if ok:
