@@ -1,3 +1,7 @@
+v 0.4.0:
+- “Play all” functionality for all video lists
+- ability to save complex objects for later use
+
 v 0.3.1:
 - added language localization support
 - improve XBMC boolean settings handling

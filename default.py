@@ -41,6 +41,7 @@ def fetch_vids(filters={}, reset=False):
   return data['content']
 
 def list_vids(videos):
+  items = []
   for video in videos:
     if len(video['source']) == 0:
       continue
@@ -64,6 +65,8 @@ def list_vids(videos):
       'height': float(video['height']),
     }
     menu.addVideoItem(item, video)
+    items.append(item)
+  settings.setobj('temp video list', items)
 
 ok = True
 page = common.args.get('page', None)
@@ -122,7 +125,16 @@ elif page == 'list_vids':
   else:
     list_vids(videos)
     menu.moreVideosBtn(common.args)
-  
+
+elif page == 'playall':
+  playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+  playlist.clear()
+  tempvs = settings.getobj('temp video list')
+  for tempv in tempvs:
+    li = menu.formatVideoItemBasic(tempv)
+    playlist.add(tempv['file']['url'], li)
+  xbmc.executebuiltin('playlist.playoffset(video , 0)')
+
 else:
   menu.addFolderItem(common.l(30502), {'page':'recent'})
   menu.addFolderItem(common.l(30503), {'page':'muppets'})

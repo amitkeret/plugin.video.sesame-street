@@ -28,7 +28,15 @@ def addVideoItem(video, original_video_data):
   li.setIconImage(video['images']['small'])
   li.setThumbnailImage(video['images']['medium'])
   li.setProperty('fanart_image', video['images']['large'])
+  
+  li.addContextMenuItems(cmItemsVideo(video, original_video_data), replaceItems=False)
   xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=video['file']['url'], listitem=li)
+  return li
+
+def formatVideoItemBasic(video):
+  li = xbmcgui.ListItem(video['title'], iconImage=video['images']['small'], thumbnailImage=video['images']['medium'])
+  li.setInfo('video', {'title': video['title'], 'plot': video['description'], 'plotoutline': video['description']})
+  return li
 
 def moreVideosBtn(args={}):
   if 'pagenum' in args:
@@ -41,3 +49,8 @@ def moreVideosBtn(args={}):
   args.update({'page':'list_vids','pagenum':pagenum})
   utils.log(args)
   addFolderItem(common.l(30501), args)
+
+def cmItemsVideo(item, data):
+  cm = []
+  cm.append((common.l(30505), "XBMC.RunPlugin(%s)" % utils.build_url({'page':'playall'})))
+  return cm

@@ -1,4 +1,4 @@
-import sys
+import sys, pickle
 from resources.lib import common
 
 generalVideonum = common.addon.getSetting('general videonum')
@@ -14,3 +14,15 @@ def get(id):
 
 def set(id, value):
   common.addon.setSetting(id, value)
+
+def getobj(id):
+  try:
+    return pickle.loads(get(id))
+  except:
+    return False
+
+def setobj(id, obj):
+  try:
+    set(id, pickle.dumps(obj))
+  except:
+    return False
