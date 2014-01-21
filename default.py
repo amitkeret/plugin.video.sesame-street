@@ -6,7 +6,7 @@ import xbmcplugin
 
 from BeautifulSoup import BeautifulSoup as bsoup
 
-from resources.lib import common, settings, utils
+from resources.lib import common, settings, utils, session
 
 xbmcplugin.setContent(common.addon_handle, 'movies')
 
@@ -31,9 +31,11 @@ def fetch_vids(filters={}, reset=False):
     post_data['criteria']['filters']['age'] = settings.filterAgegroup
   
   utils.log(post_data)
-  headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+  headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Cookie': session.getCookie()}
   req = urllib2.Request(common.sesame_base_url + '/c/portal/json_service', urllib.urlencode(post_data), headers)
-  data = json.load(urllib2.urlopen(req))
+  res = urllib2.urlopen(req)
+  session.parseCookieHeaders(res)
+  data = json.load(res)
   if len(data['content']) == 0:
     return False
   return data['content']
@@ -79,6 +81,7 @@ if page == 'topics':
 elif page == 'recent':
   videos = fetch_vids(reset=True)
   list_vids(videos)
+  utils.moreVideosBtn()
 
 elif page == 'muppets':
   # get JSON-formatted names
@@ -119,6 +122,7 @@ elif page == 'list_vids':
     xbmcgui.Dialog().ok(common.addon_name, 'No videos were found.')
   else:
     list_vids(videos)
+    utils.moreVideosBtn(common.args)
   
 else:
   li = xbmcgui.ListItem('Recent videos', iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')

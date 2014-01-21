@@ -28,3 +28,14 @@ def getHTML(uri, mobile=False):
     url = common.sesame_base_url + '/' + uri
   html = urllib.urlopen(url)
   return html.read()
+
+# "More videos..." button
+def moreVideosBtn(args={}):
+  li = xbmcgui.ListItem('More videos...')
+  if 'pagenum' in args:
+    pagenum = int(args['pagenum']) + 1
+  else:
+    pagenum = 0
+  args.update({'page':'list_vids','pagenum':pagenum})
+  log(args)
+  xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=build_url(args), listitem=li, isFolder=True)
