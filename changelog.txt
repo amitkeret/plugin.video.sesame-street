@@ -1,3 +1,8 @@
+v 0.2.3:
+- better debug printing
+- debug logging setting
+- "reset" parameter in video fetching defaulted to False
+
 v 0.2.2:
 - performance: setting to fetch muppet pictures
 
