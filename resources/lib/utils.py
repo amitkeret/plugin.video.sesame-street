@@ -4,7 +4,7 @@ import xbmc, xbmcgui, xbmcplugin
 
 from resources.lib import common, settings
 
-def filestack(depth=1):
+def filestack(depth=2):
   stack = inspect.stack()[depth]
   file = stack[1].split('/')
   return (file[len(file)-1], stack[2], stack[3])
