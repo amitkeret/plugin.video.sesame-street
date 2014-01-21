@@ -14,12 +14,12 @@ def fetch_vids(filters={}, reset=False):
   post_data = {
     'serviceClassName': 'org.sesameworkshop.service.UmpServiceUtil',
     'serviceMethodName': 'getMediaItems',
-    'serviceParameters': ["criteria","capabilities","resultsBiasingPolicy","context"],
+    'serviceParameters': ['criteria','capabilities','resultsBiasingPolicy','context'],
     'criteria': {
-      "qty": settings.generalVideonum,
-      "reset": reset,
-      "type": "video",
-      "filters": filters
+      'qty': settings.generalVideonum,
+      'reset': reset,
+      'type': 'video',
+      'filters': filters
     },
     'capabilities': {},
     'resultsBiasingPolicy': '',
