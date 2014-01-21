@@ -6,7 +6,7 @@ import xbmcplugin
 
 from BeautifulSoup import BeautifulSoup as bsoup
 
-from resources.lib import common, settings, utils, session
+from resources.lib import common, settings, utils, session, menu
 
 xbmcplugin.setContent(common.addon_handle, 'movies')
 
@@ -44,44 +44,41 @@ def list_vids(videos):
   for video in videos:
     if len(video['source']) == 0:
       continue
-    videoFile = video['source'][0]
-    url = videoFile['fileName']
     
-    li = xbmcgui.ListItem(video['title'])
-    li.setInfo('video', {
-      'count': video['sesameItemId'],
-      'codec': videoFile['codec'],
-      'plot': video['description'],
-      'plotoutline': video['description'],
-      'cast': video['character'].split(';'),
-    })
-    li.setIconImage(common.sesame_base_url + video['thumbnailSmall'])
-    li.setThumbnailImage(common.sesame_base_url + video['thumbnailLarge'])
-    li.addStreamInfo('video', {
-      'codec': videoFile['codec'],
-      'width': video['width'],
-      'height': video['height'],
-      'aspect': video['width'] / video['height']
-    })
-    li.setProperty('fanart_image', common.sesame_base_url + video['poster'])
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=url, listitem=li)
+    item = {
+      'uid': video['sesameItemId'],
+      'file': {
+        'url': video['source'][0]['fileName'],
+        'codec': video['source'][0]['codec'],
+        'bitrate': video['source'][0]['bitRate'],
+      },
+      'title': video['title'],
+      'description': video['description'],
+      'images': {
+        'small': common.sesame_base_url + video['thumbnailSmall'],
+        'medium': common.sesame_base_url + video['thumbnailLarge'],
+        'large': common.sesame_base_url + video['poster']
+      },
+      'cast': str(video['character']).split(';'),
+      'width': float(video['width']),
+      'height': float(video['height']),
+    }
+    menu.addVideoItem(item, video)
 
 ok = True
 page = common.args.get('page', None)
 if page == 'topics':
   html = utils.getHTML('videos')
   lis = bsoup(html).find('select', {'class':re.compile("filter-topic")}).findAll('option')
-  
   for item in lis:
     if item['value'] == '':
       continue
-    li = xbmcgui.ListItem(item.string, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','reset':1,'topic':int(item['value'])}), listitem=li, isFolder=True)
-    
+    menu.addFolderItem(item.string, {'page':'list_vids','reset':1,'topic':int(item['value'])})
+
 elif page == 'recent':
   videos = fetch_vids(reset=True)
   list_vids(videos)
-  utils.moreVideosBtn()
+  menu.moreVideosBtn()
 
 elif page == 'muppets':
   # get JSON-formatted names
@@ -105,9 +102,11 @@ elif page == 'muppets':
           break;
   
   for k,muppet in muppets.items():
-    li = xbmcgui.ListItem(muppet.get('pretty-name', muppet['json-name']), iconImage=muppet.get('image-src', ''), thumbnailImage=muppet.get('image-src', ''))
-    xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','reset':1,'muppet':muppet['json-name']}), listitem=li, isFolder=True)
-    
+    title = muppet.get('pretty-name', muppet['json-name'])
+    query = {'page':'list_vids','reset':1,'muppet':muppet['json-name']}
+    icon = thumb = muppet.get('image-src', '')
+    menu.addFolderItem(title, query, icon, thumb)
+
 elif page == 'list_vids':
   utils.log(common.args)
   filters = {}
@@ -122,15 +121,12 @@ elif page == 'list_vids':
     xbmcgui.Dialog().ok(common.addon_name, 'No videos were found.')
   else:
     list_vids(videos)
-    utils.moreVideosBtn(common.args)
+    menu.moreVideosBtn(common.args)
   
 else:
-  li = xbmcgui.ListItem('Recent videos', iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-  xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'recent'}), listitem=li, isFolder=True)
-  li = xbmcgui.ListItem('Muppets', iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-  xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'muppets'}), listitem=li, isFolder=True)
-  li = xbmcgui.ListItem('Topics', iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-  xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'topics'}), listitem=li, isFolder=True)
+  menu.addFolderItem('Recent videos', {'page':'recent'})
+  menu.addFolderItem('Muppets', {'page':'muppets'})
+  menu.addFolderItem('Topics', {'page':'topics'})
 
 
 if ok:

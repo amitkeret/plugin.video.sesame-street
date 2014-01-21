@@ -16,3 +16,6 @@ for k, arg in args.items():
 sesame_base_domain = 'sesamestreet.org'
 sesame_base_url = 'http://www.' + sesame_base_domain
 sesame_m_base_url = 'http://m.' + sesame_base_domain
+
+tvshow_title = 'Sesame Street'
+tvshow_imdb = 'tt0063951'
