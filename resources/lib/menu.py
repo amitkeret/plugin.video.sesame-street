@@ -40,4 +40,4 @@ def moreVideosBtn(args={}):
     del args['reset']
   args.update({'page':'list_vids','pagenum':pagenum})
   utils.log(args)
-  addFolderItem(common.l(30201), args)
+  addFolderItem(common.l(30501), args)
