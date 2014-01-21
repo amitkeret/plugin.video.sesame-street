@@ -106,7 +106,7 @@ elif page == 'muppets':
     xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url({'page':'list_vids','reset':1,'muppet':muppet['json-name']}), listitem=li, isFolder=True)
     
 elif page == 'list_vids':
-#  utils.log(common.args)
+  utils.log(common.args)
   filters = {}
   if common.args.get('muppet'):
     filters['muppet'] = common.args['muppet']

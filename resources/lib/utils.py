@@ -2,9 +2,11 @@ import urllib, urllib2
 import json
 import xbmc, xbmcgui, xbmcplugin
 
-from resources.lib import common
+from resources.lib import common, settings
 
 def log(txt):
+  if settings.generalDebug != 'true':
+    return
   if isinstance (txt, str):
     txt = txt.decode("utf-8")
   message = u'%s: %s' % ('SESAMESTREET', txt)
