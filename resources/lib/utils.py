@@ -1,15 +1,21 @@
 import urllib, urllib2
-import json
+import json, inspect
 import xbmc, xbmcgui, xbmcplugin
 
 from resources.lib import common, settings
+
+def filestack(depth=1):
+  stack = inspect.stack()[depth]
+  file = stack[1].split('/')
+  return (file[len(file)-1], stack[2], stack[3])
 
 def log(txt):
   if settings.generalDebug != 'true':
     return
   if isinstance (txt, str):
     txt = txt.decode("utf-8")
-  message = u'%s: %s' % ('SESAMESTREET', txt)
+  (file, line, func) = filestack()
+  message = u'%s: (%s, %s, %s) - %s' % ('SESAMESTREET', file, line, func, txt)
   xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 def build_url(query):
