@@ -2,8 +2,8 @@ import sys
 from resources.lib import common
 
 generalVideonum = common.addon.getSetting('general videonum')
-generalMuppetPictures = common.addon.getSetting('general muppetpictures')
-generalDebug = common.addon.getSetting('general debug')
+generalMuppetPictures = common.addon.getSetting('general muppetpictures') == 'true'
+generalDebug = common.addon.getSetting('general debug') == 'true'
 filterAgegroup = common.addon.getSetting('filter agegroup')
 
 # set during runtime, not by the user

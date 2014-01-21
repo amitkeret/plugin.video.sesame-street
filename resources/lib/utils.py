@@ -10,7 +10,7 @@ def filestack(depth=2):
   return (file[len(file)-1], stack[2], stack[3])
 
 def log(txt):
-  if settings.generalDebug != 'true':
+  if settings.generalDebug == False:
     return
   if isinstance (txt, str):
     txt = txt.decode("utf-8")

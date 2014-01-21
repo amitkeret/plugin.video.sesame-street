@@ -90,7 +90,7 @@ elif page == 'muppets':
     muppets.update({matchi.split('|')[0]: {'json-name': matchi.split('|')[1]}})
   
   # get pretty names and pictures
-  if settings.generalMuppetPictures == 'true':
+  if settings.generalMuppetPictures == True:
     html = utils.getHTML('muppets', True)
     lis = bsoup(html).find('ul', {'id':'muppet-slideshow'}).findAll('li', {'class':re.compile("section")})
     for item in lis:
