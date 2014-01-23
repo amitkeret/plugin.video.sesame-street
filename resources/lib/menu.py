@@ -2,7 +2,7 @@ import xbmc, xbmcgui, xbmcplugin
 from resources.lib import common, settings, utils
 
 def addFolderItem(title, query={}, icon='DefaultFolder.png', thumb='DefaultFolder.png'):
-  li = xbmcgui.ListItem(title, icon, thumb)
+  li = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=thumb)
   xbmcplugin.addDirectoryItem(handle=common.addon_handle, url=utils.build_url(query), listitem=li, isFolder=True)
 
 def addVideoItem(video, original_video_data):
